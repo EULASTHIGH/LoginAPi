@@ -1,12 +1,13 @@
 package com.deepjyoti.logindemo;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class LoginServices {
     private final LoginRepo loginRepo;
-
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     public LoginServices(LoginRepo loginRepo) {
         this.loginRepo = loginRepo;
     }
@@ -16,6 +17,8 @@ public class LoginServices {
     }
 
     public void AddUser(Login login){
+        String hashedPassword = passwordEncoder.encode(login.getPassword());
+        login.setPassword(hashedPassword);
         loginRepo.save(login);
     }
 
